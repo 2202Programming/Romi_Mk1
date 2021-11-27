@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.DriverPrefs;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TankDriveCommand;
+import frc.robot.commands.driveArm;
 import frc.robot.subsystems.RomiArm;
 import frc.robot.subsystems.RomiDrivetrain;
 import frc.robot.subsystems.hid.HID_Xbox_Subsystem;
@@ -26,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
-  private final RomiArm m_romiArm = new RomiArm(Constants.romiArmChannel);
+  private final RomiArm m_romiArm = new RomiArm(Constants.romiGrabberChannel, Constants.romiWristChannel, Constants.romiShoulderChannel);
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_romiDrivetrain);
   private final TankDriveCommand m_teleCommand = new TankDriveCommand(m_romiDrivetrain);
   private final XboxController driverController = new XboxController(0);
@@ -36,6 +37,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    m_romiArm.setDefaultCommand(new driveArm(m_romiArm, driverController));
   }
 
   /**
@@ -45,8 +47,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driverControls.bind(Id.Driver, XboxPOV.POV_UP).whenPressed(new InstantCommand( m_romiArm::incrementTarget ));
-    driverControls.bind(Id.Driver, XboxPOV.POV_DOWN).whenPressed(new InstantCommand( m_romiArm::decrementTarget ));
+    //driverControls.bind(Id.Driver, XboxPOV.POV_UP).whenPressed(new InstantCommand( m_romiArm::incrementTarget ));
+    //driverControls.bind(Id.Driver, XboxPOV.POV_DOWN).whenPressed(new InstantCommand( m_romiArm::decrementTarget ));
   }
 
   /**
