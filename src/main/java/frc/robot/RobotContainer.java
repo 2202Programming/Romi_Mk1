@@ -31,8 +31,8 @@ public class RobotContainer {
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
   private final RomiArm m_romiArm = new RomiArm(Constants.romiGrabberChannel, Constants.romiWristChannel,
       Constants.romiShoulderChannel);
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_romiDrivetrain);
-  private final TankDriveCommand m_teleCommand = new TankDriveCommand(m_romiDrivetrain);
+  private final ExampleCommand m_teleCommand = new ExampleCommand(m_romiDrivetrain);
+  private final TankDriveCommand m_autoCommand = new TankDriveCommand(m_romiDrivetrain);
   private final XboxController driverController = new XboxController(0);
   public final HID_Xbox_Subsystem driverControls = new HID_Xbox_Subsystem(DriverPrefs.VelExpo, DriverPrefs.RotationExpo,
       DriverPrefs.StickDeadzone);
