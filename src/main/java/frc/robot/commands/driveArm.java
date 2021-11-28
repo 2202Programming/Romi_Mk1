@@ -35,8 +35,8 @@ public class driveArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setWrist(Math.abs(controls.getRawAxis(4))); // right x
-    arm.setShoulder(Math.abs(controls.getRawAxis(5))); // right y
+    arm.setWrist((controls.getRawAxis(4)+1)/2); // right x
+    arm.setShoulder((controls.getRawAxis(5)+1)/2); // right y
     // arm.setServo(Math.abs(controls.getRawAxis(0))); //left stick X axis
   }
 
