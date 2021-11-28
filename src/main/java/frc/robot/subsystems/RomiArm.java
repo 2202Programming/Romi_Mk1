@@ -16,14 +16,18 @@ public class RomiArm extends SubsystemBase {
   private Servo grabberServo;
   private Servo wristServo;
   private Servo shoulderServo;
-  
-  private double pwmTargetPW = 1.5; //in ms
+
+  private double pwmTargetPW = 1.5; // in ms
   private double target;
 
   public final String NT_Name = "Arm"; // expose data under arm table
   private NetworkTable table;
-  private NetworkTableEntry nt_target;
-  private NetworkTableEntry nt_current;
+  private NetworkTableEntry nt_grabber_target;
+  private NetworkTableEntry nt_grabber_current;
+  private NetworkTableEntry nt_wrist_target;
+  private NetworkTableEntry nt_wrist_current;
+  private NetworkTableEntry nt_shoulder_target;
+  private NetworkTableEntry nt_shoulder_current;
   private NetworkTableEntry nt_PWtarget;
 
   public RomiArm(int grabberPWMChannel, int wristPWMChannel, int shoulderPWMChannel) {
@@ -31,60 +35,73 @@ public class RomiArm extends SubsystemBase {
     wristServo = new Servo(wristPWMChannel);
     shoulderServo = new Servo(shoulderPWMChannel);
 
-    //Set servo bounds 2.4ms to 0.5ms per documentation
-    grabberServo.setBounds(2.4, 2.4, (2.4-0.5)/2, 0.5, 0.5);
-    wristServo.setBounds(2.4, 2.4, (2.4-0.5)/2, 0.5, 0.5);
-    shoulderServo.setBounds(2.4, 2.4, (2.4-0.5)/2, 0.5, 0.5);
+    // Set servo bounds 2.4ms to 0.5ms per documentation
+    grabberServo.setBounds(2.4, 2.4, (2.4 - 0.5) / 2, 0.5, 0.5);
+    wristServo.setBounds(2.4, 2.4, (2.4 - 0.5) / 2, 0.5, 0.5);
+    shoulderServo.setBounds(2.4, 2.4, (2.4 - 0.5) / 2, 0.5, 0.5);
 
-      // for updating CAN status in periodic
-      table = NetworkTableInstance.getDefault().getTable(NT_Name);
-      nt_target = table.getEntry("/nt_target");
-      nt_current = table.getEntry("/nt_current");
-      nt_PWtarget = table.getEntry("/nt_PWTarget");
+    // for updating CAN status in periodic
+    table = NetworkTableInstance.getDefault().getTable(NT_Name);
+    nt_grabber_target = table.getEntry("/nt_grabber_target");
+    nt_grabber_current = table.getEntry("/nt_grabber_current");
+    nt_wrist_target = table.getEntry("/nt_wrist_target");
+    nt_wrist_current = table.getEntry("/nt_wrist_current");
+    nt_shoulder_target = table.getEntry("/nt_shoulder_target");
+    nt_shoulder_current = table.getEntry("/nt_shoulder_current");
+    nt_PWtarget = table.getEntry("/nt_PWTarget");
   }
 
-  public void setServo(double temp) { //from 0.0 to 1.0 full left to full right
-    target = temp;
-    armServo.set(target); 
-    nt_target.setDouble(target);
+  public void setGrabber(double target) { // from 0.0 to 1.0 full left to full right
+    grabberServo.set(target);
+    nt_grabber_target.setDouble(target);
   }
 
-  public void setServo() { //from 0.0 to 1.0 full left to full right
-    armServo.set(target);
-    nt_target.setDouble(target);
-    System.out.println("SetServo target = " + target);
+  public double getGrabber() {
+    return grabberServo.get();
   }
 
-  public void setTargetPW() { 
-    //takes a ms pulse width and converts to 0 to 1
-    //as a ration of max to min PW
-    double max = 2.4;
-    double min = 0.5;
-    if(pwmTargetPW < min) pwmTargetPW = min;
-    if(pwmTargetPW > max) pwmTargetPW = max;
-    target = (pwmTargetPW - min) / (max - min);
-    setServo();
-    System.out.println("PWM Target = " + pwmTargetPW + ", max = " + max
-                        + ", min = " + min + ", target = " + target);
+  public void setWrist(double target) { // from 0.0 to 1.0 full left to full right
+    wristServo.set(target);
+    nt_wrist_target.setDouble(target);
   }
 
-  public void incrementTarget(){
-    pwmTargetPW = 0.1 + pwmTargetPW;
-    setTargetPW();
-    nt_PWtarget.setDouble(pwmTargetPW);
+  public void setShoulder(double target) { // from 0.0 to 1.0 full left to full right
+    shoulderServo.set(target);
+    nt_shoulder_target.setDouble(target);
   }
 
-  public void decrementTarget(){
-    pwmTargetPW = pwmTargetPW - 0.1;
-    setTargetPW();
-    nt_PWtarget.setDouble(pwmTargetPW);
-  }
+  // public void setTargetPW() {
+  // //takes a ms pulse width and converts to 0 to 1
+  // //as a ration of max to min PW
+  // double max = 2.4;
+  // double min = 0.5;
+  // if(pwmTargetPW < min) pwmTargetPW = min;
+  // if(pwmTargetPW > max) pwmTargetPW = max;
+  // target = (pwmTargetPW - min) / (max - min);
+  // setServo();
+  // System.out.println("PWM Target = " + pwmTargetPW + ", max = " + max
+  // + ", min = " + min + ", target = " + target);
+  // }
+
+  // public void incrementTarget(){
+  // pwmTargetPW = 0.1 + pwmTargetPW;
+  // setTargetPW();
+  // nt_PWtarget.setDouble(pwmTargetPW);
+  // }
+
+  // public void decrementTarget(){
+  // pwmTargetPW = pwmTargetPW - 0.1;
+  // setTargetPW();
+  // nt_PWtarget.setDouble(pwmTargetPW);
+  // }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    nt_current.setDouble(armServo.getPosition());
-    
+    nt_wrist_current.setDouble(wristServo.getPosition());
+    nt_grabber_current.setDouble(grabberServo.getPosition());
+    nt_shoulder_current.setDouble(shoulderServo.getPosition());
+
   }
 
   void sleep(long ms) {

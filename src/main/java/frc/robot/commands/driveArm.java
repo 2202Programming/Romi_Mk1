@@ -9,6 +9,7 @@ import java.sql.Driver;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.RomiArm;
+import frc.robot.subsystems.hid.XboxAxis;
 import frc.robot.subsystems.ifx.DriverControls;
 
 public class driveArm extends CommandBase {
@@ -28,17 +29,21 @@ public class driveArm extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //arm.setServo(Math.abs(controls.getRawAxis(0))); //left stick X axis
+    arm.setWrist(Math.abs(controls.getRawAxis(4))); // right x
+    arm.setShoulder(Math.abs(controls.getRawAxis(5))); // right y
+    // arm.setServo(Math.abs(controls.getRawAxis(0))); //left stick X axis
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

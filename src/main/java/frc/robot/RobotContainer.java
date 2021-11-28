@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.DriverPrefs;
+import frc.robot.commands.ChangeGrabber;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TankDriveCommand;
 import frc.robot.commands.driveArm;
@@ -19,21 +20,26 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in the {@link Robot} periodic methods (other than the
+ * scheduler calls). Instead, the structure of the robot (including subsystems,
+ * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
-  private final RomiArm m_romiArm = new RomiArm(Constants.romiGrabberChannel, Constants.romiWristChannel, Constants.romiShoulderChannel);
+  private final RomiArm m_romiArm = new RomiArm(Constants.romiGrabberChannel, Constants.romiWristChannel,
+      Constants.romiShoulderChannel);
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_romiDrivetrain);
   private final TankDriveCommand m_teleCommand = new TankDriveCommand(m_romiDrivetrain);
   private final XboxController driverController = new XboxController(0);
-  public final HID_Xbox_Subsystem driverControls = new HID_Xbox_Subsystem(DriverPrefs.VelExpo, DriverPrefs.RotationExpo, DriverPrefs.StickDeadzone); 
+  public final HID_Xbox_Subsystem driverControls = new HID_Xbox_Subsystem(DriverPrefs.VelExpo, DriverPrefs.RotationExpo,
+      DriverPrefs.StickDeadzone);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
@@ -41,14 +47,20 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //driverControls.bind(Id.Driver, XboxPOV.POV_UP).whenPressed(new InstantCommand( m_romiArm::incrementTarget ));
-    //driverControls.bind(Id.Driver, XboxPOV.POV_DOWN).whenPressed(new InstantCommand( m_romiArm::decrementTarget ));
+    driverControls.bind(Id.Driver, XboxPOV.POV_UP).whenPressed(new ChangeGrabber(m_romiArm, true));
+    driverControls.bind(Id.Driver, XboxPOV.POV_DOWN).whenPressed(new ChangeGrabber(m_romiArm, false));
+
+    // driverControls.bind(Id.Driver, XboxPOV.POV_UP).whenPressed(new
+    // InstantCommand( m_romiArm::incrementTarget ));
+    // driverControls.bind(Id.Driver, XboxPOV.POV_DOWN).whenPressed(new
+    // InstantCommand( m_romiArm::decrementTarget ));
+
   }
 
   /**
@@ -61,7 +73,7 @@ public class RobotContainer {
     return m_autoCommand;
   }
 
-  public Command getTeleCommand (){
+  public Command getTeleCommand() {
     return m_teleCommand;
   }
 }
