@@ -37,8 +37,8 @@ public class RomiArm extends SubsystemBase {
 
     // Set servo bounds 2.4ms to 0.5ms per documentation
     grabberServo.setBounds(2.4, 2.4, (2.4 - 0.5) / 2, 0.5, 0.5);
-    wristServo.setBounds(2.4, 2.4, (2.4 - 0.5) / 2, 0.5, 0.5);
-    shoulderServo.setBounds(2.4, 2.4, (2.4 - 0.5) / 2, 0.5, 0.5);
+    wristServo.setBounds(1.9, 1.9, (1.9 - 1.2) / 2, 1.2, 1.2);
+    shoulderServo.setBounds(1.9, 1.9, (1.3 - 1.0) / 2, 1.0, 1.0);
 
     // for updating CAN status in periodic
     table = NetworkTableInstance.getDefault().getTable(NT_Name);
@@ -61,11 +61,15 @@ public class RomiArm extends SubsystemBase {
   }
 
   public void setWrist(double target) { // from 0.0 to 1.0 full left to full right
+    //if(target > 0.9) target = 0.9;
+    if(target < 0.35) target = 0.35;
     wristServo.set(target);
     nt_wrist_target.setDouble(target);
   }
 
   public void setShoulder(double target) { // from 0.0 to 1.0 full left to full right
+    if(target > 0.6) target = 0.6;
+    if(target < 0.1) target = 0.1;
     shoulderServo.set(target);
     nt_shoulder_target.setDouble(target);
   }

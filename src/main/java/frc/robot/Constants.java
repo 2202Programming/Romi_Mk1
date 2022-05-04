@@ -13,14 +13,15 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static int romiGrabberChannel = 2;
-    public static int romiWristChannel = 3;
-    public static int romiShoulderChannel = 4;
+    public static int romiGrabberChannel = 3;
+    public static int romiWristChannel = 4;
+    public static int romiShoulderChannel = 2;
     
 
     public static final class DriverPrefs {
         public static final double VelExpo = 0.3;        // non-dim [0.0 - 1.0]
         public static final double RotationExpo = 0.9;   // non-dim [0.0 - 1.0]
         public static final double StickDeadzone = 0.05; // non-dim [0.0 - 1.0]
+        public static final double speedMultiplier = 0.5;
     }
 }

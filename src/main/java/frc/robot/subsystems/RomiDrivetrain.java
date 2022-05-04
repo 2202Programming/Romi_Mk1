@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.DriverPrefs;
 
 public class RomiDrivetrain extends SubsystemBase {
   private static final double kCountsPerRevolution = 1440.0;
@@ -35,7 +37,10 @@ public class RomiDrivetrain extends SubsystemBase {
   }
 
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
-    m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate);
+    double xSpeed = xaxisSpeed * DriverPrefs.speedMultiplier;
+    double zSpeed = zaxisRotate * DriverPrefs.speedMultiplier;
+    System.out.println("xSpeed = " + xSpeed + ", zSpeed = " + zSpeed);
+    m_diffDrive.arcadeDrive(xSpeed, zSpeed);
   }
 
   public void tankDrive(double leftSpeed, double rightSpeed) {

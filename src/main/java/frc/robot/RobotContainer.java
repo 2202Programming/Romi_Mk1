@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.DriverPrefs;
+import frc.robot.commands.AutoArm;
 import frc.robot.commands.ChangeGrabber;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TankDriveCommand;
@@ -70,7 +71,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return new AutoArm(m_romiArm);
   }
 
   public Command getTeleCommand() {
